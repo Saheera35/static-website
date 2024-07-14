@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+  build:
+    commands:
+      - echo "Building static site..."
+      # Replace `npm run build` with your build command if different
+      - npm run build
+  post_build:
+    commands:
+      - echo "Deploying to S3..."
+      - aws s3 sync ./dist s3://<your-bucket-name> --delete
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./dist
